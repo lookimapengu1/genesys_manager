@@ -1,0 +1,29 @@
+version: "3"
+services:
+  app:
+    build: .
+    #command: python rpg/manage.py runserver 0:8080
+    volumes:
+      - .genesys:/usr/src/app
+    ports:
+      - 8080:8080 
+    environment:
+      - SQL_ENGINE=django.db.backends.postgresql
+      - SQL_DATABASE=genesys
+      - SQL_USER=postgres
+      - SQL_PASSWORD=genesys123!
+      - SQL_HOST=database
+      - SQL_PORT=5432
+    depends_on:
+      - database
+
+  database:
+    image: postgres:11.5-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_PASSWORD=genesys123!
+      - POSTGRES_DB=genesys
+
+volumes:
+  postgres_data:
